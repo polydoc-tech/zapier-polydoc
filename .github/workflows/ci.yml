@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  validate-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx zapier-platform validate
+      - run: npm test # unit tests; live smoke tests skip without POLYDOC_API_KEY
+
+  # Pushes a new version to the Zapier editor on a version tag. Requires the
+  # ZAPIER_DEPLOY_KEY repo secret. Promotion to the App Directory stays manual.
+  push:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: validate-test
+    runs-on: ubuntu-latest
+    env:
+      ZAPIER_DEPLOY_KEY: ${{ secrets.ZAPIER_DEPLOY_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx zapier-platform push

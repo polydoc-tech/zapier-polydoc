@@ -1,0 +1,50 @@
+{
+  "name": "zapier-polydoc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Zapier integration for PolyDoc - HTML/URL to PDF, screenshots, and EU e-invoices (Factur-X / ZUGFeRD).",
+  "keywords": [
+    "polydoc",
+    "pdf",
+    "html-to-pdf",
+    "screenshot",
+    "e-invoice",
+    "factur-x",
+    "zugferd",
+    "zapier"
+  ],
+  "license": "MIT",
+  "homepage": "https://polydoc.tech",
+  "author": {
+    "name": "PolyDoc",
+    "email": "hello@polydoc.tech"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polydoc-tech/zapier-polydoc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/polydoc-tech/zapier-polydoc/issues"
+  },
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc",
+    "_zapier-build": "npm run build",
+    "test": "vitest run",
+    "test:integration": "vitest run test/creates.test.ts",
+    "validate": "zapier-platform validate",
+    "push": "zapier-platform push"
+  },
+  "dependencies": {
+    "zapier-platform-core": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.8",
+    "zapier-platform-cli": "^19.0.0"
+  }
+}

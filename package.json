@@ -1,6 +1,6 @@
 {
   "name": "zapier-polydoc",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Zapier integration for PolyDoc - HTML/URL to PDF, screenshots, and EU e-invoices (Factur-X / ZUGFeRD).",
   "keywords": [

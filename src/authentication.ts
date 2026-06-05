@@ -52,14 +52,15 @@ const authentication: Authentication = {
       type: 'boolean',
       default: 'false',
       helpText:
-        'Run conversions in sandbox mode (higher quota, watermarked output). Sends the X-Sandbox header.',
+        'Run conversions in sandbox mode (higher quota, watermarked output). Sends the X-Sandbox header. [Learn more](https://docs.polydoc.tech).',
     },
     {
       key: 'baseUrl',
       label: 'Base URL',
       type: 'string',
       default: DEFAULT_BASE_URL,
-      helpText: 'PolyDoc API base URL. Change only for self-hosted or staging environments.',
+      helpText:
+        'PolyDoc API base URL. Change only for self-hosted or staging environments. [Learn more](https://docs.polydoc.tech).',
     },
   ],
   test,

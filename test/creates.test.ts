@@ -27,6 +27,35 @@ async function call(input: Record<string, unknown>, operation: Parameters<typeof
   });
 }
 
+describe('paramsFromInput source resolution', () => {
+  it('infers HTML when the field is filled but Source is left on its url default', () => {
+    const p = paramsFromInput({ html: '<h1>Invoice</h1>' }, 'einvoice');
+    expect(p.sourceType).toBe('html');
+    expect(p.html).toBe('<h1>Invoice</h1>');
+    expect(p.url).toBeUndefined();
+  });
+
+  it('infers Template when only Template ID is filled', () => {
+    const p = paramsFromInput({ template_id: 'jlE-whg' }, 'pdf');
+    expect(p.sourceType).toBe('template');
+    expect(p.templateId).toBe('jlE-whg');
+  });
+
+  it('honors the explicit Source when its matching field is filled', () => {
+    const p = paramsFromInput({ source_type: 'url', url: 'https://example.com' }, 'pdf');
+    expect(p.sourceType).toBe('url');
+    expect(p.url).toBe('https://example.com');
+  });
+
+  it('keeps the explicit Source when more than one source field is filled (ambiguous)', () => {
+    const p = paramsFromInput(
+      { source_type: 'url', url: 'https://example.com', html: '<p>x</p>' },
+      'pdf',
+    );
+    expect(p.sourceType).toBe('url');
+  });
+});
+
 describe.skipIf(!API_KEY)('PolyDoc live API (sandbox)', () => {
   it('Create PDF from inline HTML returns a PDF', async () => {
     const res = await call({ source_type: 'html', html: '<h1>Smoke</h1>', delivery_mode: 'download' }, 'pdf');

@@ -58,8 +58,25 @@ function parseJsonField(value: unknown): Json | undefined {
   return undefined;
 }
 
+// Honor the explicit Source dropdown when its matching field is filled.
+// Otherwise infer from the single filled source field, so a user who fills HTML
+// (or Template ID) but leaves the Source dropdown on its 'url' default still
+// gets what they typed. Zapier has no conditional field display, so the dropdown
+// and the filled field can disagree; the filled field is the stronger signal.
+function resolveSourceType(input: Json): PolyDocSourceType {
+  const explicit = (str(input.source_type) ?? 'url') as PolyDocSourceType;
+  const filled: Record<PolyDocSourceType, string | undefined> = {
+    url: str(input.url),
+    html: str(input.html),
+    template: str(input.template_id),
+  };
+  if (filled[explicit]) return explicit;
+  const present = (Object.keys(filled) as PolyDocSourceType[]).filter((k) => filled[k]);
+  return present.length === 1 ? present[0] : explicit;
+}
+
 export function paramsFromInput(input: Json, operation: PolyDocOperation): PolyDocParams {
-  const sourceType = (str(input.source_type) ?? 'url') as PolyDocSourceType;
+  const sourceType = resolveSourceType(input);
   const deliveryMode = (str(input.delivery_mode) ?? 'download') as PolyDocDeliveryMode;
 
   const params: PolyDocParams = {
@@ -128,7 +145,7 @@ function requireSource(z: ZObject, params: PolyDocParams): void {
         : params.templateId;
   if (!value) {
     throw new z.errors.Error(
-      `Provide a value for the ${params.sourceType.toUpperCase()} source field.`,
+      'Provide a source: fill in the URL, HTML, or Template ID field.',
       'InvalidInput',
       400,
     );

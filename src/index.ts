@@ -11,6 +11,10 @@ const App = {
   version,
   platformVersion,
 
+  // We normalize empty values ourselves in perform (str/parseJsonField/source
+  // inference), so keep the raw input rather than letting Zapier prune it.
+  flags: { cleanInputData: false },
+
   authentication,
   beforeRequest: [addAuthHeader],
   afterResponse: [],

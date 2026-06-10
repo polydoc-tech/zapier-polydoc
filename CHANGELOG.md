@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- The connection label now shows whether an account runs in Live or Sandbox mode, so multiple PolyDoc connections are easy to tell apart.
+- Removed the Base URL field. The integration always uses the production API at api.polydoc.tech.
+- Generate E-Invoice: the Invoice Data field links to a setup guide with a complete worked example.
+
 ## 1.0.0
 
 Initial public release of the PolyDoc integration.

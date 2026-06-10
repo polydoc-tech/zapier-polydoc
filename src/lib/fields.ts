@@ -31,6 +31,9 @@ export function sourceFields(): PlainInputField[] {
       helpText: 'Inline HTML to render. Used when Source is HTML.',
     },
     {
+      // Plain text, not a dynamic dropdown: the PolyDoc API exposes no
+      // endpoint to list a key's templates (they resolve by ID at convert
+      // time), so the D004 "looks like an ID field" warning is expected here.
       key: 'template_id',
       label: 'Template ID',
       type: 'string',

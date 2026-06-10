@@ -3,8 +3,8 @@ import { extractApiErrorMessage } from './lib/buildRequestBody';
 
 export const DEFAULT_BASE_URL = 'https://api.polydoc.tech';
 
-export function baseUrlOf(bundle: Bundle): string {
-  return (bundle.authData.baseUrl || DEFAULT_BASE_URL).replace(/\/+$/, '');
+export function baseUrlOf(): string {
+  return DEFAULT_BASE_URL;
 }
 
 // PolyDoc has no cheap auth-only endpoint, so the credential test runs a minimal
@@ -13,7 +13,7 @@ export function baseUrlOf(bundle: Bundle): string {
 // for App Directory review.
 const test = async (z: ZObject, bundle: Bundle) => {
   const response = await z.request({
-    url: `${baseUrlOf(bundle)}/screenshot/convert`,
+    url: `${baseUrlOf()}/screenshot/convert`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-Sandbox': 'true' },
     body: JSON.stringify({ source: '<p>polydoc</p>', screenshot: { type: 'png' } }),
@@ -32,7 +32,8 @@ const test = async (z: ZObject, bundle: Bundle) => {
       response.status,
     );
   }
-  return { connected: true };
+  const sandbox = bundle.authData.sandbox === 'true';
+  return { connected: true, environment: sandbox ? 'Sandbox' : 'Live' };
 };
 
 const authentication: Authentication = {
@@ -54,17 +55,9 @@ const authentication: Authentication = {
       helpText:
         'Run conversions in sandbox mode (higher quota, watermarked output). Sends the X-Sandbox header. [Learn more](https://docs.polydoc.tech).',
     },
-    {
-      key: 'baseUrl',
-      label: 'Base URL',
-      type: 'string',
-      default: DEFAULT_BASE_URL,
-      helpText:
-        'PolyDoc API base URL. Change only for self-hosted or staging environments. [Learn more](https://docs.polydoc.tech).',
-    },
   ],
   test,
-  connectionLabel: 'PolyDoc ({{bundle.authData.baseUrl}})',
+  connectionLabel: 'PolyDoc ({{bundle.inputData.environment}})',
 };
 
 export default authentication;

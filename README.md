@@ -6,7 +6,7 @@ Three actions:
 
 - **Create PDF** - layout, margins, page format, page ranges, bookmarks, accessible/tagged PDFs.
 - **Capture Screenshot** - PNG / JPEG / WebP, full page, viewport and device-pixel-ratio control.
-- **Generate E-Invoice** - Factur-X or ZUGFeRD, profiles from `minimum` to `extended`.
+- **Generate E-Invoice** - Factur-X or ZUGFeRD, profiles from `minimum` to `extended`. Setup walkthrough and a complete worked example: [docs/einvoice.md](./docs/einvoice.md).
 
 Content can come from a **URL**, an inline **HTML** string, or a saved **template** (with Liquid template data). Each action returns a Zapier **File** by default (ready to attach in a downstream Gmail, Drive, or Slack step), or uploads to your **cloud storage** (presigned URL) or delivers to a **webhook**.
 

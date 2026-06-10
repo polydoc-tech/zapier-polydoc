@@ -69,7 +69,7 @@ so they are built in Pass 3 after the first push.
 The buildable, verifiable-now foundation.
 - ☑ `package.json` (MIT, name `zapier-polydoc`, exact `zapier-platform-core` pin), `tsconfig`, `vitest.config`, `.gitignore`, `LICENSE`.
 - ☑ `src/lib/buildRequestBody.ts` - ported pure helpers (`buildRequestBody`, `mergeDeep`, `defaultFilename`, `extractApiErrorMessage`).
-- ☑ `src/authentication.ts` (apiKey/sandbox/baseUrl + sandbox-screenshot test + connectionLabel) and `src/middleware.ts` (Bearer beforeRequest).
+- ☑ `src/authentication.ts` (apiKey/sandbox + sandbox-screenshot test + connectionLabel) and `src/middleware.ts` (Bearer beforeRequest).
 - ☑ `src/lib/fields.ts`, `src/lib/perform.ts` (input -> params -> request -> stash/JSON), `src/lib/samples.ts`.
 - ☑ `src/creates/{createPdf,createScreenshot,createEinvoice}.ts` + `src/index.ts` App definition.
 - ☑ `test/buildRequestBody.test.ts` (14 unit cases) + `test/creates.test.ts` (live sandbox smoke, gated on `POLYDOC_API_KEY`).
@@ -88,6 +88,20 @@ The buildable, verifiable-now foundation.
 - ☐ Author the three Zap templates above in the developer dashboard.
 - ☐ Record the walkthrough video (connect -> test passes -> run each create); use a production key for clean (unwatermarked) output, self-contained demo HTML to avoid the CDN-script hang.
 - ☐ `zapier-platform promote <version>` and submit for App Directory review.
+
+Publishing-check sequencing (the real blockers, all gated on adoption, not code):
+- Pushed Zapier versions are immutable. The validate-warning fixes (cleanInputData
+  flag, baseUrl drop, connectionLabel environment) land in **1.0.1**, not 1.0.0, so
+  promote 1.0.1.
+- S001 needs 3 distinct users with a live Zap, S002 needs >=1 live Zap per action,
+  T001 a successful live run per action, A001 a connected account, all **on the
+  promoted version** (1.0.1). Build the 3 tester Zaps on 1.0.1, free 2-step
+  (Sheets/Tables -> PolyDoc action). M002: set the dashboard description to start
+  "PolyDoc is a" (no "Zapier"). Also: integration-testing@zapier.com test account,
+  an @polydoc.tech admin team member, and the e-invoice doc link
+  (docs/einvoice.md) in the submission notes.
+- The 3 remaining validate warnings are template_id/D004, left by design (no
+  list-templates API endpoint; see comment in src/lib/fields.ts).
 
 ---
 

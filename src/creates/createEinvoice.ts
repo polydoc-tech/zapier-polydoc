@@ -63,7 +63,7 @@ const einvoiceOptionFields: PlainInputField[] = [
     type: 'text',
     default: defaultInvoice,
     helpText:
-      'Structured invoice data: seller, buyer, lines, totals. See docs.polydoc.tech for the full schema.',
+      'Structured invoice data: seller, buyer, lines, totals. See the [setup guide and worked example](https://github.com/polydoc-tech/zapier-polydoc/blob/main/docs/einvoice.md), or the [full schema](https://docs.polydoc.tech).',
   },
   {
     key: 'einvoice_verify',

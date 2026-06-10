@@ -167,7 +167,7 @@ export async function convert(
   requireSource(z, params);
 
   const { endpoint, body, isBinary } = buildRequestBody(params);
-  const url = `${baseUrlOf(bundle)}${endpoint}`;
+  const url = `${baseUrlOf()}${endpoint}`;
   const sandbox = bool(bundle.authData.sandbox) ?? false;
   const headers = {
     'Content-Type': 'application/json',

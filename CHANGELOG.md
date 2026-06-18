@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Security hardening: when merging the Advanced (JSON) field into the request, the integration now ignores the prototype-pollution keys __proto__, constructor, and prototype.
+
 ## 1.0.1
 
 - The connection label now shows whether an account runs in Live or Sandbox mode, so multiple PolyDoc connections are easy to tell apart.

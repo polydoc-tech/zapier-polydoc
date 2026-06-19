@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Invoice INV-2026-0042</title>
+    <style>
+      :root {
+        --ink: #20232a;
+        --muted: #6b7280;
+        --line: #e5e7eb;
+        --panel: #20232a;
+        --zebra: #f7f8fa;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: "Georgia", "Times New Roman", serif;
+        color: var(--ink);
+        font-size: 13px;
+        line-height: 1.55;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .sans { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+      .page { max-width: 760px; margin: 0 auto; padding: 0 0 44px; }
+      .panel {
+        background: var(--panel);
+        color: #fff;
+        padding: 34px 44px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+      .panel .company { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+      .panel .company small { display: block; font-size: 11px; font-weight: 400; opacity: 0.75; margin-top: 4px; }
+      .panel .doc { text-align: right; }
+      .panel .doc .word { font-size: 26px; letter-spacing: 4px; text-transform: uppercase; }
+      .panel .doc small { display: block; font-size: 12px; opacity: 0.8; margin-top: 4px; }
+      .body { padding: 32px 44px 0; }
+      .grid { display: flex; gap: 40px; }
+      .grid .col { flex: 1; }
+      .label {
+        font-size: 10.5px; text-transform: uppercase; letter-spacing: 1px;
+        color: var(--muted); margin-bottom: 6px;
+      }
+      .col .name { font-weight: 700; }
+      .meta-row { display: flex; gap: 40px; margin-top: 26px; }
+      .meta-row .item .v { font-weight: 700; }
+      table.items { width: 100%; border-collapse: collapse; margin-top: 30px; font-size: 12.5px; }
+      table.items thead th {
+        border-bottom: 2px solid var(--panel);
+        text-align: left; padding: 9px 12px;
+        font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px;
+      }
+      table.items th.num, table.items td.num { text-align: right; }
+      table.items tbody tr:nth-child(even) { background: var(--zebra); }
+      table.items tbody td { padding: 10px 12px; }
+      .totals { display: flex; justify-content: flex-end; margin-top: 20px; }
+      .totals table { border-collapse: collapse; min-width: 300px; }
+      .totals td { padding: 7px 12px; }
+      .totals td.num { text-align: right; }
+      .totals tr.grand td { background: var(--panel); color: #fff; font-weight: 700; font-size: 15px; }
+      .pay { display: flex; gap: 40px; margin-top: 34px; }
+      .pay .col { flex: 1; font-size: 12px; }
+      .pay .body-txt { color: #374151; }
+      .hybrid-note {
+        margin-top: 30px; padding: 12px 14px; border: 1px solid var(--line);
+        border-left: 4px solid var(--panel); font-size: 11px; color: var(--muted);
+      }
+      footer { margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: 10.5px; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="panel">
+        <div class="company sans">
+          Your Company GmbH
+          <small>Sample Street 1, 10115 Berlin, Germany</small>
+        </div>
+        <div class="doc sans">
+          <div class="word">Invoice</div>
+          <small>No. INV-2026-0042</small>
+        </div>
+      </div>
+
+      <div class="body">
+        <div class="grid">
+          <div class="col">
+            <div class="label">From</div>
+            <div class="name">Your Company GmbH</div>
+            <div>Sample Street 1</div>
+            <div>10115 Berlin, Germany</div>
+            <div>VAT ID: DE123456789</div>
+          </div>
+          <div class="col">
+            <div class="label">Bill to</div>
+            <div class="name">Customer Ltd.</div>
+            <div>10 Rue de Exemple</div>
+            <div>75001 Paris, France</div>
+            <div>VAT ID: FR40303265045</div>
+          </div>
+        </div>
+
+        <div class="meta-row">
+          <div class="item">
+            <div class="label">Issue date</div>
+            <div class="v">1 June 2026</div>
+          </div>
+          <div class="item">
+            <div class="label">Due date</div>
+            <div class="v">1 July 2026</div>
+          </div>
+          <div class="item">
+            <div class="label">Currency</div>
+            <div class="v">EUR</div>
+          </div>
+        </div>
+
+        <table class="items">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th class="num">Qty</th>
+              <th class="num">Unit price</th>
+              <th class="num">VAT</th>
+              <th class="num">Net amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Consulting services</td>
+              <td class="num">10</td>
+              <td class="num">120.00</td>
+              <td class="num">19%</td>
+              <td class="num">1,200.00</td>
+            </tr>
+            <tr>
+              <td>Project setup fee</td>
+              <td class="num">1</td>
+              <td class="num">300.00</td>
+              <td class="num">19%</td>
+              <td class="num">300.00</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="totals">
+          <table>
+            <tr>
+              <td>Net total</td>
+              <td class="num">EUR 1,500.00</td>
+            </tr>
+            <tr>
+              <td>VAT (19%)</td>
+              <td class="num">EUR 285.00</td>
+            </tr>
+            <tr class="grand">
+              <td>Total due</td>
+              <td class="num">EUR 1,785.00</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="pay">
+          <div class="col">
+            <div class="label">Payment details</div>
+            <div class="body-txt">
+              Account name: Your Company GmbH<br />
+              IBAN: DE89 3704 0044 0532 0130 00<br />
+              BIC: COBADEFFXXX
+            </div>
+          </div>
+          <div class="col">
+            <div class="label">Terms</div>
+            <div class="body-txt">Payment due within 30 days of the invoice date.</div>
+          </div>
+        </div>
+
+        <div class="hybrid-note sans">
+          This document is a hybrid electronic invoice (ZUGFeRD / EN 16931). Structured
+          invoice data is embedded in the PDF for automated processing.
+        </div>
+
+        <footer class="sans">
+          Your Company GmbH | VAT ID DE123456789 | billing@your-company.example
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>

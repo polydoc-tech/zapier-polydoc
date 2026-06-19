@@ -1,0 +1,63 @@
+{
+  "number": "INV-2026-0042",
+  "issueDate": "2026-06-01",
+  "dueDate": "2026-07-01",
+  "currencyCode": "EUR",
+  "seller": {
+    "name": "Your Company GmbH",
+    "address": {
+      "line1": "Sample Street 1",
+      "city": "Berlin",
+      "postalCode": "10115",
+      "countryCode": "DE"
+    },
+    "taxId": "DE123456789",
+    "email": "billing@your-company.example"
+  },
+  "buyer": {
+    "name": "Customer Ltd.",
+    "address": {
+      "line1": "10 Rue de Exemple",
+      "city": "Paris",
+      "postalCode": "75001",
+      "countryCode": "FR"
+    },
+    "taxId": "FR40303265045"
+  },
+  "lines": [
+    {
+      "description": "Consulting services",
+      "quantity": 10,
+      "unitPrice": 120.0,
+      "lineTotal": 1200.0,
+      "vatRate": 19,
+      "vatCategoryCode": "S"
+    },
+    {
+      "description": "Project setup fee",
+      "quantity": 1,
+      "unitPrice": 300.0,
+      "lineTotal": 300.0,
+      "vatRate": 19,
+      "vatCategoryCode": "S"
+    }
+  ],
+  "taxSummary": [
+    {
+      "categoryCode": "S",
+      "rate": 19,
+      "taxableAmount": 1500.0,
+      "taxAmount": 285.0
+    }
+  ],
+  "paymentTerms": "Payment due within 30 days of the invoice date.",
+  "paymentMeans": {
+    "typeCode": "58",
+    "iban": "DE89370400440532013000",
+    "bic": "COBADEFFXXX",
+    "accountName": "Your Company GmbH"
+  },
+  "totalNetAmount": 1500.0,
+  "totalTaxAmount": 285.0,
+  "totalGrossAmount": 1785.0
+}

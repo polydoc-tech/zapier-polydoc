@@ -111,7 +111,7 @@ export function additionalFields(): PlainInputField[] {
       label: 'Advanced (JSON)',
       type: 'text',
       helpText:
-        'Raw JSON deep-merged into the request body for any API option not exposed above (pdf.watermark, pdf.pdfa, pdf.ua, render, request).',
+        'Raw JSON deep-merged into the request body for any API option not exposed above (pdf.watermark, pdf.pdfa, pdf.pdfua, render, request).',
     },
   ];
 }

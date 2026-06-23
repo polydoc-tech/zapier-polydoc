@@ -52,7 +52,7 @@ export default {
   noun: 'PDF',
   display: {
     label: 'Create PDF',
-    description: 'Convert a URL, inline HTML, or a saved template into a PDF.',
+    description: 'Converts a URL, inline HTML, or a saved template into a PDF.',
   },
   operation: {
     inputFields: [...sourceFields(), ...pdfOptionFields, ...deliveryFields(), ...additionalFields()],

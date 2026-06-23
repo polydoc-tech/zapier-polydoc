@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3
+
+- Connection label no longer includes the integration name. Zapier numbers multiple PolyDoc connections automatically.
+- Reworded the action descriptions to start with a third-person verb (Converts, Captures, Generates).
+
 ## 1.0.2
 
 - Security hardening: when merging the Advanced (JSON) field into the request, the integration now ignores the prototype-pollution keys __proto__, constructor, and prototype.

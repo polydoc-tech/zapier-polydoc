@@ -1,4 +1,4 @@
-import type { Authentication, Bundle, ZObject } from 'zapier-platform-core';
+import type { Authentication, ZObject } from 'zapier-platform-core';
 import { extractApiErrorMessage } from './lib/buildRequestBody';
 
 export const DEFAULT_BASE_URL = 'https://api.polydoc.tech';
@@ -11,7 +11,7 @@ export function baseUrlOf(): string {
 // sandbox screenshot: X-Sandbox forces sandbox quota (never production), 200
 // means the key is valid, 401/403 means it is not. A working test is mandatory
 // for App Directory review.
-const test = async (z: ZObject, bundle: Bundle) => {
+const test = async (z: ZObject) => {
   const response = await z.request({
     url: `${baseUrlOf()}/screenshot/convert`,
     method: 'POST',
@@ -32,8 +32,7 @@ const test = async (z: ZObject, bundle: Bundle) => {
       response.status,
     );
   }
-  const sandbox = bundle.authData.sandbox === 'true';
-  return { connected: true, environment: sandbox ? 'Sandbox' : 'Live' };
+  return { connected: true };
 };
 
 const authentication: Authentication = {
@@ -57,7 +56,6 @@ const authentication: Authentication = {
     },
   ],
   test,
-  connectionLabel: 'PolyDoc ({{bundle.inputData.environment}})',
 };
 
 export default authentication;

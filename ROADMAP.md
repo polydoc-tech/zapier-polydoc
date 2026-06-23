@@ -100,8 +100,17 @@ Publishing-check sequencing (the real blockers, all gated on adoption, not code)
   "PolyDoc is a" (no "Zapier"). Also: integration-testing@zapier.com test account,
   an @polydoc.tech admin team member, and the e-invoice doc link
   (docs/einvoice.md) in the submission notes.
-- The 3 remaining validate warnings are template_id/D004, left by design (no
-  list-templates API endpoint; see comment in src/lib/fields.ts).
+- 4 validate warnings remain, all by design and non-blocking: 3x template_id/D004
+  (no list-templates API endpoint; see comment in src/lib/fields.ts) and 1x
+  connectionLabel/D003 (the label is intentionally blank so Zapier auto-numbers
+  connections, since PolyDoc auth exposes no account value; the App Directory
+  reviewer endorsed this in the 1.0.3 review round).
+
+Reviewer round 1 (on 1.0.2), addressed in 1.0.3:
+- Connection label must not contain the integration name (req 5.6). Removed it;
+  Zapier auto-numbers connections. No account/email value exists to show instead.
+- Action descriptions must start with a third-person verb (req 5.8). Reworded to
+  Converts / Captures / Generates.
 
 ---
 

@@ -52,7 +52,7 @@ export default {
   noun: 'Screenshot',
   display: {
     label: 'Capture Screenshot',
-    description: 'Capture a screenshot of a URL or inline HTML as PNG, JPEG, or WebP.',
+    description: 'Captures a screenshot of a URL or inline HTML as PNG, JPEG, or WebP.',
   },
   operation: {
     inputFields: [

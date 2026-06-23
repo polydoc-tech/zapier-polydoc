@@ -80,7 +80,7 @@ export default {
   display: {
     label: 'Generate E-Invoice',
     description:
-      'Generate a ZUGFeRD or Factur-X hybrid PDF/A-3 e-invoice (a human-readable PDF with embedded EN 16931 XML).',
+      'Generates a ZUGFeRD or Factur-X hybrid PDF/A-3 e-invoice (a human-readable PDF with embedded EN 16931 XML).',
   },
   operation: {
     inputFields: [

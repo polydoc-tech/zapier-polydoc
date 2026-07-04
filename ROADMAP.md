@@ -77,17 +77,25 @@ The buildable, verifiable-now foundation.
 - ☑ `assets/polydoc-logo-1024.png` for the dashboard branding step.
 - ☑ README, this ROADMAP, CI workflow.
 
-### Pass 2 - Register + push + in-product verification ☐ (manual, needs Zapier login)
-- ☐ `npm i -g zapier-platform-cli`; `zapier-platform login` (dev account).
-- ☐ `zapier-platform register "PolyDoc"` (writes `.zapierapprc`); upload `assets/polydoc-logo-1024.png` + brand color `#F04E23` + descriptions in the dashboard.
-- ☐ `zapier-platform push`; connect a PolyDoc account (confirm the auth test passes, and fails on a wrong key).
-- ☐ Run each create once end to end; confirm the `file` arrives and opens in a downstream step (Gmail attachment / Drive upload).
-- ☐ Confirm Cloud Storage delivery returns JSON + lands in the presigned bucket; Webhook delivery posts to a RequestBin.
+### Pass 2 - Register + push + in-product verification ☑
+- ☑ `npm i -g zapier-platform-cli`; `zapier-platform login` (dev account).
+- ☑ `zapier-platform register "PolyDoc"` (writes `.zapierapprc`); upload `assets/polydoc-logo-1024.png` + brand color `#F04E23` + descriptions in the dashboard.
+- ☑ `zapier-platform push`; connect a PolyDoc account (confirm the auth test passes, and fails on a wrong key).
+- ☑ Run each create once end to end; confirm the `file` arrives and opens in a downstream step (Gmail attachment / Drive upload).
+- ☑ Confirm Cloud Storage delivery returns JSON + lands in the presigned bucket; Webhook delivery posts to a RequestBin.
 
-### Pass 3 - Zap templates + App Directory submission ☐
-- ☐ Author the three Zap templates above in the developer dashboard.
-- ☐ Record the walkthrough video (connect -> test passes -> run each create); use a production key for clean (unwatermarked) output, self-contained demo HTML to avoid the CDN-script hang.
-- ☐ `zapier-platform promote <version>` and submit for App Directory review.
+### Pass 3 - Zap templates + App Directory submission ◐
+- ☑ Record the walkthrough video (connect -> test passes -> run each create); production key for clean (unwatermarked) output, self-contained demo HTML to avoid the CDN-script hang.
+- ☑ `zapier-platform promote 1.0.3` and submit for App Directory review.
+- ☑ **App Directory review APPROVED (2026-07-01).** Live public listing: https://zapier.com/apps/polydoc/integrations (Create PDF, Capture Screenshot, Generate E-Invoice).
+- ☐ Author the three Zap templates above in the developer dashboard (public templates, distinct from the private tester Zaps built for the adoption gates).
+- ◐ Rework the docs guide (`polydoc-web` `documentation/.../integrations/Zapier.tsx` + `zapier.md`) from the free-plan Code-by-Zapier workaround to the native PolyDoc app flow.
+  - **Finding (verified live in the Zap editor, 2026-07-01):** the native **PolyDoc app is NOT Premium** (standard action, free-plan usable). **Webhooks by Zapier / Catch Hook IS Premium** (editor flags "using 1 Enterprise feature") - so the old guide's "Catch Hook is free" premise was wrong. Decision: switch the guide's trigger to **Google Sheets** (free standard app) for a genuinely free-plan example.
+  - New flow: **Google Sheets (New Spreadsheet Row) -> PolyDoc (Create PDF, Source=Template, Delivery=Download) -> Gmail**. Delivery=Download returns a File Gmail attaches directly, so no Code step / no bucket. Action fields + the 3 action descriptions match the connector source exactly (confirmed live).
+  - ☑ Text/structure rewrite done on branch `zapier-native-app-guide` (3 steps). tsc clean. IntegrationsIndex card refreshed to surface the native app. Old Catch Hook/Code webp deleted.
+  - ☑ 3 screenshots captured (user) + processed via the guide-screenshots skill to 1622x1064 webp and wired in: `zapier-sheets-step1-trigger.webp`, `zapier-create-pdf-step2.webp`, `zapier-gmail-step3.webp`. Full `yarn build` green.
+  - Step-3 Gmail screenshot recaptured to show the Attachments field bound to the PolyDoc File output (the distinctive integration point); alt text updated to match. All 3 shots now accurate.
+  - ☐ Deploy via `polydoc-infra/scripts/12-deploy-static-sites.sh docs` (docs deploy is a manual script; merging pdoc-web main deploys nothing).
 
 Publishing-check sequencing (the real blockers, all gated on adoption, not code):
 - Pushed Zapier versions are immutable. The validate-warning fixes (cleanInputData

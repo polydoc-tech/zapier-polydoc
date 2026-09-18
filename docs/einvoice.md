@@ -63,7 +63,7 @@ Top level:
 | `totalGrossAmount` | yes | `net + tax`. |
 | `note` | no | Free text shown on the invoice. |
 | `buyerReference` | no | Buyer reference (BT-10). For German public-sector invoices this is the Leitweg-ID. |
-| `orderReference` | no | Purchase order number (BT-13). The built-in e-invoice template does not print it on the page yet: if you use that template, also send the number as `buyerReference`. |
+| `orderReference` | no | Purchase order number (BT-13). The built-in e-invoice template prints it as "PO Number". |
 
 **Party** (`seller`, `buyer`):
 
@@ -110,7 +110,6 @@ summary matches the lines.
   "issueDate": "2026-06-01",
   "dueDate": "2026-07-01",
   "currencyCode": "EUR",
-  "buyerReference": "PO-5582",
   "orderReference": "PO-5582",
   "seller": {
     "name": "Northwind Studio GmbH",

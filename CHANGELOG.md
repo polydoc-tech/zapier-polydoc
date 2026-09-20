@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.4
+
+- Generate E-Invoice: the Profile dropdown drops Minimum and Basic WL. Neither carries invoice lines, which EN 16931 requires (BR-16), and the PolyDoc API has answered both with 400 since 2026-09-19.
+- The e-invoice setup guide documents three new optional fields the API accepts: `contactName` on seller and buyer (BT-41/BT-56), `electronicAddress` on seller and buyer (BT-34/BT-49), and `buyerItemId` on each line (BT-156).
+
 ## 1.0.3
 
 - Connection label no longer includes the integration name. Zapier numbers multiple PolyDoc connections automatically.

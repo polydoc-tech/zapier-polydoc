@@ -49,13 +49,12 @@ const einvoiceOptionFields: PlainInputField[] = [
     type: 'string',
     default: 'en16931',
     choices: {
-      minimum: 'Minimum',
-      basicwl: 'Basic WL',
       basic: 'Basic',
       en16931: 'EN 16931',
       extended: 'Extended',
     },
-    helpText: 'The data granularity profile to validate against.',
+    helpText:
+      'The data granularity profile to validate against. Minimum and Basic WL were retired in 2026-09: neither carries invoice lines, so neither is an EN 16931 e-invoice.',
   },
   {
     key: 'invoice',

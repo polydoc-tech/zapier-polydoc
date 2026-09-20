@@ -72,7 +72,9 @@ Top level:
 | `name` | yes | Legal name. |
 | `address` | yes | Address object (see below). |
 | `taxId` | seller: see rules | VAT ID. Required on the seller when any line uses VAT category `S`. |
-| `email`, `phone` | no | Optional contact details. |
+| `email`, `phone` | no | Contact email (BT-43 / BT-58) and phone (BT-42 / BT-57). Reach the XML only with profile `en16931` or `extended`. |
+| `contactName` | no | Contact person (BT-41 seller, BT-56 buyer). Reaches the XML only with profile `en16931` or `extended`. |
+| `electronicAddress` | no | `{ "schemeId": "0088", "id": "4004301000005" }`. The party's electronic invoicing address (BT-34 seller, BT-49 buyer). Reaches the XML at every profile, `basic` included. Send both parts or neither: half of it is a 400. `schemeId` must be a CEF EAS code, for example `0088` (GLN), `0204` (Leitweg-ID) or `EM` (email address). |
 
 **Address**: `line1` (yes), `line2` (no), `city` (yes), `postalCode` (yes),
 `countryCode` (yes, 2-letter ISO, for example `DE`).
@@ -81,7 +83,8 @@ Top level:
 
 | Field | Required | Notes |
 |---|---|---|
-| `description` | yes | What was sold. |
+| `description` | yes | Item name (BT-153). |
+| `buyerItemId` | no | The buyer's own article number for this item (BT-156). Reaches the XML only with profile `en16931` or `extended`. |
 | `quantity` | yes | Number. |
 | `unitPrice` | yes | Price per unit. |
 | `lineTotal` | yes | `quantity * unitPrice`. |
@@ -260,8 +263,9 @@ The API rejects an invoice that is not EN 16931 compliant. The usual causes:
   exactly 2, and dates are `YYYY-MM-DD`.
 - **No line items.** `lines` needs at least one entry.
 
-Higher profiles (`en16931`, `extended`) validate more strictly than `minimum` or
-`basic`. If you hit a 422, the error message names the failing rule.
+Higher profiles (`en16931`, `extended`) validate more strictly than `basic`, and
+carry fields `basic` drops. If you hit a 422, the error message names the failing
+rule.
 
 ## What you get back
 

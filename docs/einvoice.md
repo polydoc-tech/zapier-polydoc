@@ -51,9 +51,11 @@ Top level:
 | `number` | yes | Invoice number, for example `INV-001`. |
 | `issueDate` | yes | `YYYY-MM-DD`. |
 | `dueDate` | see rules | `YYYY-MM-DD`. Provide this **or** `paymentTerms`. |
+| `deliveryDate` | no | Actual delivery date (BT-72), `YYYY-MM-DD`. When omitted, `issueDate` is written as the delivery date. |
 | `currencyCode` | yes | 3-letter ISO 4217, for example `EUR`. |
 | `seller` | yes | Party object (see below). |
 | `buyer` | yes | Party object. |
+| `deliverTo` | no | Deliver-to object (see below), when the goods or services go somewhere other than the buyer. |
 | `lines` | yes | At least one line item. |
 | `taxSummary` | recommended | One entry per VAT rate. Strongly advised for EN 16931. |
 | `paymentTerms` | see rules | Free text, for example `Net 30 days`. Provide this or `dueDate`. |
@@ -78,6 +80,38 @@ Top level:
 
 **Address**: `line1` (yes), `line2` (no), `city` (yes), `postalCode` (yes),
 `countryCode` (yes, 2-letter ISO, for example `DE`).
+
+**Deliver to** (`deliverTo`): where the goods or services are delivered (BG-13).
+Reaches the XML at every profile, `basic` included. Send `name`, `address` or
+both; an empty object writes nothing.
+
+| Field | Required | Notes |
+|---|---|---|
+| `name` | no | Deliver-to party name (BT-70). |
+| `address` | no | Delivery address object (see below). |
+
+**Delivery address** (`deliverTo.address`). Unlike the party address, only the
+country is required:
+
+| Field | Required | Notes |
+|---|---|---|
+| `line1` | no | Street and house number (BT-75). |
+| `line2` | no | Additional address line (BT-76). |
+| `city` | no | City (BT-77). |
+| `postalCode` | no | Postal or ZIP code (BT-78). |
+| `countryCode` | yes | 2-letter ISO, for example `DE` (BT-80). EN 16931 requires it whenever `address` is sent (rule BR-57); without it the request is a 400. |
+
+```json
+"deliverTo": {
+  "name": "Meridian Retail SARL, Entrepot Nord",
+  "address": {
+    "line1": "8 Rue du Port",
+    "city": "Lille",
+    "postalCode": "59000",
+    "countryCode": "FR"
+  }
+}
+```
 
 **Line** (each entry in `lines`):
 

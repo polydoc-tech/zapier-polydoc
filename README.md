@@ -29,7 +29,7 @@ Every action has an **Advanced (JSON)** field that is deep-merged into the reque
 
 ## Zap templates
 
-Three example Zaps ship in the App Directory, one per angle (see `ROADMAP.md`):
+Three example Zaps ship in the App Directory, one per angle:
 
 - **PDF from your data** - a Sheets/Airtable/DB row to a branded PDF, emailed or saved.
 - **Scheduled URL screenshot** - capture a URL on a schedule to Slack or Drive.

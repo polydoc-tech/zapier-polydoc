@@ -42,7 +42,7 @@
     "zapier-platform-core": "19.1.0"
   },
   "devDependencies": {
-    "@types/node": "^22.10.0",
+    "@types/node": "^24.0.0",
     "typescript": "^5.7.0",
     "vitest": "^4.1.8",
     "zapier-platform-cli": "^19.0.0"

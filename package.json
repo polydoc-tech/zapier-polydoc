@@ -39,7 +39,7 @@
     "push": "zapier-platform push"
   },
   "dependencies": {
-    "zapier-platform-core": "19.1.0"
+    "zapier-platform-core": "19.2.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

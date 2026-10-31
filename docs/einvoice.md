@@ -57,7 +57,7 @@ Top level:
 | `buyer` | yes | Party object. |
 | `deliverTo` | no | Deliver-to object (see below), when the goods or services go somewhere other than the buyer. |
 | `lines` | yes | At least one line item. |
-| `taxSummary` | see rules | One entry per VAT category and rate. When omitted, PolyDoc groups `lines` by `vatCategoryCode` and `vatRate` and rounds each group's tax once, to cents. Required when the invoice has invoice-level `allowances` or `charges`. Send it whenever you compute the tax yourself, for example rounded per line: `totalTaxAmount` must equal the sum of its `taxAmount` values. |
+| `taxSummary` | see rules | One entry per VAT category and rate. When omitted or empty, PolyDoc groups `lines` by `vatCategoryCode` (default `S`) and `vatRate` (default 0) and rounds each group's tax once, to cents. Required when the invoice has invoice-level `allowances` or `charges`. Send it whenever you compute the tax yourself, for example rounded per line: `totalTaxAmount` must equal the sum of its `taxAmount` values. |
 | `paymentTerms` | see rules | Free text, for example `Net 30 days`. Provide this or `dueDate`. |
 | `paymentMeans` | no | Bank details (IBAN/BIC) for payment. |
 | `allowances` | no | Allowances on the whole invoice (BG-20), for example an early-order discount. Allowance or charge objects (see below). Subtract them in `totalNetAmount`. Reach the XML at every profile. Require `taxSummary`, whose `taxableAmount` must already include them. |
@@ -146,7 +146,9 @@ line's own VAT.
 | `vatRate` | invoice: see rules | VAT rate in percent (BT-96, BT-103), for example `19`. Required for every category except `O` (not subject to VAT), where it must be left out. Either mistake is a 400. Not used on a line. |
 
 A line with a 10 % volume discount, and freight charged on the whole invoice.
-The line total is 10 * 120 - 120 = 1080, and the net total is 1080 + 50 = 1130:
+The line total is 10 * 120 - 120 = 1080, and the net total is 1080 + 50 = 1130.
+This block is not a complete Invoice Data on its own: its keys replace the
+matching ones in the full example below.
 
 ```json
 "lines": [
@@ -336,14 +338,19 @@ it renders reliably. Edit the values to match the JSON above.
 ## Validation rules (why you might get an HTTP 400 or 422)
 
 The API rejects an invoice that is not EN 16931 compliant. It answers 400 when a
-field is missing or wrong or the totals do not add up, and 422 when the XML fails
-an EN 16931 rule. The usual causes:
+field is missing or wrong or the totals do not add up, and 422 when the e-invoice
+cannot be built or fails validation, most often an EN 16931 rule in the XML. The
+usual causes:
 
 - **No payment date.** Provide `dueDate` **or** `paymentTerms` (EN 16931 rule
   BR-CO-25). The example has both.
 - **Totals do not reconcile.** `totalNetAmount` must equal the sum of line totals,
   minus the invoice-level allowances, plus the invoice-level charges, and
   `totalNetAmount + totalTaxAmount` must equal `totalGrossAmount`.
+- **Allowances or charges that do not add up.** On a line with allowances or
+  charges, `lineTotal` must be within 0.02 of `quantity * unitPrice` minus the
+  allowances plus the charges. Invoice-level allowances or charges need
+  `taxSummary`. Each allowance or charge needs a `reason` or a `reasonCode`.
 - **Missing seller VAT ID with standard-rated VAT.** When any line uses
   `vatCategoryCode: "S"`, the seller needs a `taxId`.
 - **Wrong code lengths.** `currencyCode` is exactly 3 letters, `countryCode`

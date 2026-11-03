@@ -197,10 +197,11 @@ nothing.
 | `id` | yes | Number of the preceding invoice (BT-25). An `issueDate` without an `id` is a 400 (rule BR-55). |
 | `issueDate` | no | Issue date of the preceding invoice (BT-26), `YYYY-MM-DD`. |
 
-A credit note for the example invoice below. These keys replace or add to the
-matching ones in a complete Invoice Data, whose `lines` and totals are those of
-the credit note. Keep `unitPrice` positive: a negative unit price is a 422
-(rule BR-27).
+A credit note for the example invoice below. This block is not a complete
+Invoice Data on its own: its keys replace or add to the matching ones in a
+complete Invoice Data, whose `lines` and totals are those of the credit note.
+`unitPrice` must not be negative on a credit note either: a negative unit price
+is a 422 (rule BR-27).
 
 ```json
 "number": "CN-2026-003",

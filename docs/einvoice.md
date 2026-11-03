@@ -49,6 +49,7 @@ Top level:
 | Field | Required | Notes |
 |---|---|---|
 | `number` | yes | Invoice number, for example `INV-001`. |
+| `typeCode` | no | Document type code (BT-3) from UNTDID 1001: `381` for a credit note, `384` for a corrected invoice. When omitted, `380` (commercial invoice) is written. A code outside the EN 16931 list is a 422 (rule BR-CL-01), an empty string a 400. Not the same field as `paymentMeans.typeCode`. The built-in e-invoice template titles every document "Invoice", whatever its type code. |
 | `issueDate` | yes | `YYYY-MM-DD`. |
 | `dueDate` | see rules | `YYYY-MM-DD`. Provide this **or** `paymentTerms`. |
 | `deliveryDate` | no | Actual delivery date (BT-72), `YYYY-MM-DD`. When omitted, `issueDate` is written as the delivery date. |
@@ -68,6 +69,8 @@ Top level:
 | `note` | no | Free text shown on the invoice. |
 | `buyerReference` | no | Buyer reference (BT-10). For German public-sector invoices this is the Leitweg-ID. |
 | `orderReference` | no | Purchase order number (BT-13). The built-in e-invoice template prints it as "PO Number". |
+| `salesOrderReference` | no | The seller's own sales order number (BT-14), for example `SO-2026-0815`. Reaches the XML only with profile `en16931` or `extended`; left out with `basic`. The built-in e-invoice template does not print it. |
+| `precedingInvoiceReference` | no | The invoice that a credit note or corrected invoice refers to (BG-3), see below. Reaches the XML at every profile, `basic` included. The built-in e-invoice template does not print it. |
 
 **Party** (`seller`, `buyer`):
 
@@ -184,6 +187,27 @@ charges of that category.
 **Payment means** (`paymentMeans`): `typeCode` (required, for example `58` for
 SEPA credit transfer), plus optional `iban`, `bic`, `accountName`,
 `paymentReference`.
+
+**Preceding invoice reference** (`precedingInvoiceReference`): the invoice that
+a credit note or corrected invoice refers to (BG-3). An empty object writes
+nothing.
+
+| Field | Required | Notes |
+|---|---|---|
+| `id` | yes | Number of the preceding invoice (BT-25). An `issueDate` without an `id` is a 400 (rule BR-55). |
+| `issueDate` | no | Issue date of the preceding invoice (BT-26), `YYYY-MM-DD`. |
+
+A credit note for the example invoice below. These keys replace or add to the
+matching ones in a complete Invoice Data, whose `lines` and totals are those of
+the credit note. Keep `unitPrice` positive: a negative unit price is a 422
+(rule BR-27).
+
+```json
+"number": "CN-2026-003",
+"typeCode": "381",
+"precedingInvoiceReference": { "id": "INV-2026-014", "issueDate": "2026-06-01" },
+"salesOrderReference": "SO-2026-0815"
+```
 
 ## A complete, valid example
 
@@ -351,6 +375,10 @@ usual causes:
   charges, `lineTotal` must be within 0.02 of `quantity * unitPrice` minus the
   allowances plus the charges. Invoice-level allowances or charges need
   `taxSummary`. Each allowance or charge needs a `reason` or a `reasonCode`.
+- **Credit note fields that do not fit.** A `typeCode` outside the EN 16931
+  list is a 422 (rule BR-CL-01), an empty one a 400. A
+  `precedingInvoiceReference` with an `issueDate` but no `id` is a 400. A
+  negative `unitPrice` is a 422 (rule BR-27), on a credit note too.
 - **Missing seller VAT ID with standard-rated VAT.** When any line uses
   `vatCategoryCode: "S"`, the seller needs a `taxId`.
 - **Wrong code lengths.** `currencyCode` is exactly 3 letters, `countryCode`

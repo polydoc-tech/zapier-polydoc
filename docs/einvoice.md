@@ -49,7 +49,7 @@ Top level:
 | Field | Required | Notes |
 |---|---|---|
 | `number` | yes | Invoice number, for example `INV-001`. |
-| `typeCode` | no | Document type code (BT-3) from UNTDID 1001: `381` for a credit note, `384` for a corrected invoice. When omitted, `380` (commercial invoice) is written. A code outside the EN 16931 list is a 422 (rule BR-CL-01), an empty string a 400. Not the same field as `paymentMeans.typeCode`. The built-in e-invoice template titles every document "Invoice", whatever its type code. |
+| `typeCode` | no | Document type code (BT-3) from UNTDID 1001: `381` for a credit note, `384` for a corrected invoice. When omitted, `380` (commercial invoice) is written. A code outside the EN 16931 list is a 422 (rule BR-CL-01), an empty string a 400. Not the same field as `paymentMeans.typeCode`. The built-in e-invoice template titles a credit note (381 and the other EN 16931 credit note codes) "Credit Note" and prints no payment details on it. Every other code is titled "Invoice", with the type named under the title for 384 and 389. |
 | `issueDate` | yes | `YYYY-MM-DD`. |
 | `dueDate` | see rules | `YYYY-MM-DD`. Provide this **or** `paymentTerms`. |
 | `deliveryDate` | no | Actual delivery date (BT-72), `YYYY-MM-DD`. When omitted, `issueDate` is written as the delivery date. |
@@ -69,8 +69,8 @@ Top level:
 | `note` | no | Free text shown on the invoice. |
 | `buyerReference` | no | Buyer reference (BT-10). For German public-sector invoices this is the Leitweg-ID. |
 | `orderReference` | no | Purchase order number (BT-13). The built-in e-invoice template prints it as "PO Number". |
-| `salesOrderReference` | no | The seller's own sales order number (BT-14), for example `SO-2026-0815`. Reaches the XML only with profile `en16931` or `extended`; left out with `basic`. The built-in e-invoice template does not print it. |
-| `precedingInvoiceReference` | no | The invoice that a credit note or corrected invoice refers to (BG-3), see below. Reaches the XML at every profile, `basic` included. The built-in e-invoice template does not print it. |
+| `salesOrderReference` | no | The seller's own sales order number (BT-14), for example `SO-2026-0815`. Reaches the XML only with profile `en16931` or `extended`; left out with `basic`. The built-in e-invoice template prints it as "Sales Order" with every profile. |
+| `precedingInvoiceReference` | no | The invoice that a credit note or corrected invoice refers to (BG-3), see below. Reaches the XML at every profile, `basic` included. The built-in e-invoice template prints it as "Preceding Invoice #" and "Preceding Invoice Date". |
 
 **Party** (`seller`, `buyer`):
 

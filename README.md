@@ -50,13 +50,21 @@ Live smoke test against the real API (uses sandbox quota):
 POLYDOC_API_KEY=api_xxx POLYDOC_TEMPLATE_ID=jlE-whg npm run test:integration
 ```
 
-Push a private version to your Zapier editor:
+Push a test version to your Zapier editor. `--snapshot` names it `0.0.0-<label>`, so it leaves
+the released versions alone:
 
 ```bash
 npx zapier-platform login
 npx zapier-platform register "PolyDoc"   # first time only
-npx zapier-platform push
+npx zapier-platform push --snapshot my-label
 ```
+
+## Releasing
+
+A release is a `vX.Y.Z` tag on `main`. The version in `package.json` must equal the tag, and
+`CHANGELOG.md` must have a `## X.Y.Z - YYYY-MM-DD` heading for it. The tag runs the `push` job in
+`.github/workflows/ci.yml`, which pushes that version to Zapier. Promotion to the App Directory
+stays manual.
 
 ## License
 

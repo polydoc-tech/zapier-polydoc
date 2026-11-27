@@ -66,9 +66,10 @@ jobs:
     needs: [ci-ok]
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # The half an edit to this file cannot remove: GitHub refuses to start the job unless the
-    # ref matches this environment's `v*.*.*` tag policy. ZAPIER_DEPLOY_KEY is a repository
-    # secret, so the environment gates the job but does not hold the key.
+    # GitHub refuses to start this job unless the ref matches the environment's `v*.*.*` tag
+    # policy. ZAPIER_DEPLOY_KEY is a repository secret, not an environment one, so this holds
+    # only while the line stays: a workflow edited to drop it, or any other workflow, can
+    # still read the key.
     environment: release
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

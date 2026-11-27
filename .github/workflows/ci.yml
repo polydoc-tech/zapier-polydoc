@@ -7,37 +7,109 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: read
+
 jobs:
-  validate-test:
+  test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        # 22 is the lowest Node zapier-platform-cli 19 runs on and the one Zapier runs the
+        # integration on, 26 the current LTS.
+        node-version: ['22', '26']
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: '22'
-          cache: npm
+          persist-credentials: false
+      # No dependency cache: a tag run of this workflow pushes to Zapier, and zizmor's
+      # cache-poisoning audit fails a cache in a workflow that releases.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          package-manager-cache: false
       - run: npm ci
       - run: npm run build
       - run: npx zapier-platform validate
       - run: npm test # unit tests; live smoke tests skip without POLYDOC_API_KEY
+      - name: CHANGELOG.md has a heading for the package.json version
+        run: |
+          v="$(node -p "require('./package.json').version")"
+          grep -qE "^## ${v//./\\.} - [0-9]{4}-[0-9]{2}-[0-9]{2}\$" CHANGELOG.md || {
+            echo "::error::CHANGELOG.md has no '## $v - <date>' heading"
+            exit 1
+          }
 
-  # Pushes a new version to the Zapier editor on a version tag. Requires the
-  # ZAPIER_DEPLOY_KEY repo secret. Promotion to the App Directory stays manual.
+  guard:
+    uses: polydoc-tech/.github/.github/workflows/guard.yml@f965127030d3124e119f4bd012e32f0768de2441 # main
+    with:
+      source-paths: src/
+
+  # Branch protection requires this one check instead of each leg of the `test` matrix, so
+  # adding or dropping a version needs no change there. It passes only when every leg passed.
+  ci-ok:
+    if: ${{ always() }}
+    needs: [test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Every leg of the test matrix passed
+        env:
+          RESULT: ${{ needs.test.result }}
+        run: test "$RESULT" = success
+
+  # Pushes the tagged version to the Zapier editor. Promotion to the App Directory stays
+  # manual.
   push:
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: validate-test
+    needs: [ci-ok]
     runs-on: ubuntu-latest
-    env:
-      ZAPIER_DEPLOY_KEY: ${{ secrets.ZAPIER_DEPLOY_KEY }}
+    timeout-minutes: 15
+    # The half an edit to this file cannot remove: GitHub refuses to start the job unless the
+    # ref matches this environment's `v*.*.*` tag policy. ZAPIER_DEPLOY_KEY is a repository
+    # secret, so the environment gates the job but does not hold the key.
+    environment: release
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the check below needs main's history
+          persist-credentials: false
+
+      # A tag can point at any commit. This is no defence against an edit to this file, since
+      # a tag runs the workflow as of its commit; the `release` environment above is that.
+      - name: The tag is on main
+        run: |
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            echo "::error::$GITHUB_REF_NAME points at $(git rev-parse --short HEAD), which is not on main"
+            exit 1
+          fi
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '22'
-          cache: npm
-      - run: npm ci
-      - run: npm run build
-      - run: npx zapier-platform push
+          # No dependency cache in a job that pushes: a poisoned cache would ship.
+          package-manager-cache: false
 
-  public-scrub:
-    uses: polydoc-tech/.github/.github/workflows/public-scrub.yml@main
+      # zapier-platform push uploads the version package.json names, so a tag that says
+      # otherwise would overwrite a different version on Zapier.
+      - name: package.json version matches the tag
+        run: |
+          want="${GITHUB_REF_NAME#v}"
+          have="$(node -p "require('./package.json').version")"
+          test "$want" = "$have" || {
+            echo "::error::tag says $want, package.json says $have"
+            exit 1
+          }
+
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+
+      # The key is set on this step only, so no install script sees it. The push runs a
+      # second `npm install --production` in a temp directory; npm_config_ignore_scripts keeps
+      # install scripts off there too. Nothing in the dependency tree needs one to build.
+      - name: Push to Zapier
+        env:
+          ZAPIER_DEPLOY_KEY: ${{ secrets.ZAPIER_DEPLOY_KEY }}
+          npm_config_ignore_scripts: 'true'
+        run: npx zapier-platform push
